@@ -354,23 +354,7 @@ Sortino = Annual Return / Downside Deviation
 
 ---
 
-## 7. Walk-Forward Validation (Future Work)
-
-**Current Setup:** Single train/test split
-
-**Enhanced Validation:** Walk-forward analysis
-- Split data into **rolling windows** (e.g., 12-month train, 3-month test)
-- Retrain model every 3 months with new data
-- Test how quickly strategy adapts to regime changes
-
-**Why Not Implemented?**
-- Computationally expensive
-- Current 20% test set (1+ year) is sufficient for initial validation
-- Can be added for production deployment
-
----
-
-## 8. Anti-Overfitting Safeguards
+## 7. Anti-Overfitting Safeguards
 
 ### 8.1 Temporal Integrity
 - ✅ Strict chronological split (no shuffling)
@@ -399,7 +383,7 @@ Sortino = Annual Return / Downside Deviation
 
 ---
 
-## 9. Computational Requirements
+## 8. Computational Requirements
 
 **Feature Engineering:**
 - Input: 5M rows × 21 columns
@@ -422,9 +406,9 @@ Sortino = Annual Return / Downside Deviation
 
 ---
 
-## 10. Limitations & Future Work
+## 9. Limitations & Future Work
 
-### 10.1 Known Limitations
+### 9.1 Known Limitations
 
 1. **Sample Size:** Only 1,435 daily observations (~5.7 years)
    - Financial markets are non-stationary; more data helps
@@ -442,7 +426,7 @@ Sortino = Annual Return / Downside Deviation
    - Strategy risk concentrated in tech sector
    - Mitigation: Leverage constraints, regime filter
 
-### 10.2 Future Enhancements
+### 9.2 Future Enhancements
 
 1. **Walk-Forward Validation:** Rolling retraining every quarter
 2. **Transaction Cost Model:** Explicitly account for commissions/slippage
@@ -453,9 +437,9 @@ Sortino = Annual Return / Downside Deviation
 
 ---
 
-## 11. Deployment Considerations
+## 10. Deployment Considerations
 
-### 11.1 Production Requirements
+### 10.1 Production Requirements
 
 **Data Pipeline:**
 - Daily download of EOD options data (via API or data vendor)
@@ -473,7 +457,7 @@ Sortino = Annual Return / Downside Deviation
 - After 3 months: Walk-forward retrain
 - After 6 months: Full retrain on all data
 
-### 11.2 Risk Management
+### 10.2 Risk Management
 
 **Position Limits:**
 - Max leverage: 1.5x
@@ -487,7 +471,7 @@ Sortino = Annual Return / Downside Deviation
 
 ---
 
-## 12. Conclusion
+## 11. Conclusion
 
 This methodology prioritizes **robustness, interpretability, and risk management** over maximizing backtest returns. Key principles:
 
