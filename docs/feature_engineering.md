@@ -107,7 +107,7 @@ gex = clip(gex, -5, 5)  # Final safety clip
 - `vrp_x_skew`: VRP × Volatility Skew
 - `vrp_zscore`: Rolling Z-score of VRP
 
-**Calculation (FIXED in this version):**
+**Calculation:**
 ```python
 # Only calculate VRP when both IV and RV are valid (non-zero)
 iv_valid = (iv_atm_monthly > 0.01) & (iv_atm_monthly is not NaN)
