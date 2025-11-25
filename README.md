@@ -37,7 +37,6 @@ qqq-options-alpha-research/
 ├── notebooks/
 │   ├── eda.ipynb                     # Feature engineering & EDA (NEW - Modular)
 │   └── model.ipynb                   # Model training & evaluation (NEW - Modular)
-
 ├── src/
 │   ├── feature_engineering.py        # Robust feature generation (100+ features)
 │   ├── ensemble_model.py             # Ensemble ML model (LightGBM + XGBoost + RF + Ridge)
@@ -48,6 +47,7 @@ qqq-options-alpha-research/
 │   ├── feature_engineering.md        # Feature descriptions
 │   └── methodology.md                # Model methodology & assumptions
 ├── outputs/                          # Generated results & plots
+├── environment.yml                   # Conda environment configuration
 ├── README.md                         # This file
 └── .gitignore                        # Git ignore rules
 ```
@@ -58,11 +58,15 @@ qqq-options-alpha-research/
 
 ```bash
 # Clone repository
-git clone <repo-url>
+git clone https://github.com/SMalaekeh/qqq-options-alpha-research.git
 cd qqq-options-alpha-research
 
-# Install dependencies
-pip install pandas numpy scikit-learn lightgbm xgboost matplotlib seaborn
+# Create conda environment (recommended)
+conda env create -f environment.yml
+conda activate qqq-options-alpha
+
+# OR install dependencies with pip
+pip install pandas numpy scikit-learn lightgbm xgboost matplotlib seaborn jupyter notebook ipykernel pyarrow
 ```
 
 ### 2. Run Feature Engineering
