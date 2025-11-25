@@ -126,6 +126,15 @@ The options market is a **sentiment barometer** and **positioning indicator**. L
 
 ### Model Architecture
 
+### Why Ensemble Trees over Deep Learning?
+During the R&D phase, I conducted extensive experiments comparing Deep Learning architectures against Tree-based Ensembles.
+
+* **Deep Learning Experiments:** I implemented **Transformer encoders** (for attention mechanisms on volatility surfaces) and **LSTM networks** to capture sequential dependencies.
+* **The Findings:** While DL models achieved high training accuracy, they suffered from significant variance in the test set. Given the noise-to-signal ratio in financial data, the DL models tended to overfit to specific market regimes.
+* **The Decision:** I selected an **Ensemble Approach (LightGBM + XGBoost + Random Forest + Ridge)**.
+    * **Interpretability:** Tree-based models allow for explicit feature importance analysis (Gini/Gain), aligning with the challenge's requirement for a "logical framework."
+    * **Robustness:** Bagging and Boosting proved more stable across changing volatility regimes than neural networks.
+
 **Ensemble Approach:**
 - **LightGBM** (30%): Fast gradient boosting for feature interactions
 - **XGBoost** (30%): Robust gradient boosting with regularization
@@ -203,11 +212,6 @@ Detailed documentation in `/docs/`:
 **Data Requirements:**
 - QQQ end-of-day options data (strike, IV, Greeks, volume, OI)
 - Minimum 2+ years of history for proper training
-
-**Computational Requirements:**
-- Feature engineering: ~2-5 minutes (5M rows)
-- Model training: ~1-2 minutes
-- Can run on laptop (no GPU required)
 
 ## 📝 License
 
