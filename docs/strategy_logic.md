@@ -230,7 +230,7 @@ Strategies that work in low volatility (trend-following) **fail** in high volati
 - Instability: Small data changes → big prediction changes
 
 **The "High Calmar" Trap:**
-During the R&D phase, we experimented with advanced Deep Learning architectures, including LSTMs and Transformer Encoders, to capture sequential dependencies in the volatility surface.
+During the R&D phase, we experimented with advanced Deep Learning architectures, including LSTMs and Transformer Encoders, and aggressive hyperparameter optimization using Optuna, to capture sequential dependencies in the volatility surface.
 The Result: These models achieved spectacular in-sample performance, with one Transformer variant reaching a Calmar Ratio of 4.7.
 The Failure: They lacked robustness. A 10% change in lookback windows caused performance to collapse. The models were "memorizing" the noise of the specific training period rather than learning structural market mechanics.
 
