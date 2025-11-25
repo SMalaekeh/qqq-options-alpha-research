@@ -1,6 +1,6 @@
 # QQQ Options Alpha Research
 
-> **Forecasting QQQ with its Own Options Data: A Machine Learning Approach**
+> **Forecasting QQQ with its Own Options Data: A Ensemble Machine Learning Approach**
 
 This repository contains a robust, production-ready trading strategy that uses end-of-day QQQ options data to forecast next-day directional movement and generate daily trading signals with leverage between -1.0x and +1.5x.
 
