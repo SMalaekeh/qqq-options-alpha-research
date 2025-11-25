@@ -304,11 +304,6 @@ If RV > 35%: Position *= 0.5
 3. **Low Liquidity:** Options data unreliable during market closures or holidays
 4. **Structural Changes:** Fed policy shifts, new market participants (retail surge 2020-2021)
 
-**Mitigation:**
-- Regime detection helps (but lags)
-- Kill switch protects capital during crises
-- Robustness testing ensures no overfitting to specific period
-
 ---
 
 ## Conclusion
