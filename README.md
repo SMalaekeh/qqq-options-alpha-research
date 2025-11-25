@@ -126,7 +126,7 @@ The options market is a **sentiment barometer** and **positioning indicator**. L
 
 ### Model Architecture
 
-### Why Ensemble Trees over Deep Learning?
+### Why Ensemble Trees over Deep Learning and aggressive hyperparameter optimization using Optuna?
 During the R&D phase, I conducted extensive experiments comparing Deep Learning architectures against Tree-based Ensembles.
 
 * **Deep Learning Experiments:** I implemented **Transformer encoders** (for attention mechanisms on volatility surfaces) and **LSTM networks** to capture sequential dependencies.
