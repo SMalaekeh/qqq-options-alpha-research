@@ -217,32 +217,11 @@ class FeatureEngineer:
         daily['spot_price'] = daily['spotPrice']
         daily['gex_raw'] = daily['gex_call'] - daily['gex_put']
         
-        # GEX normalization with AGGRESSIVE outlier protection
-        # First clip raw GEX to remove extreme values before normalization
-        gex_raw_p05 = daily['gex_raw'].quantile(0.05)
-        gex_raw_p95 = daily['gex_raw'].quantile(0.95)
-        daily['gex_raw_clipped'] = daily['gex_raw'].clip(gex_raw_p05, gex_raw_p95)
-        
-        # Normalize by notional value with proper scaling
-        daily['gex'] = daily['gex_raw_clipped'] / (daily['spot_price'] ** 2 * 100 + 1e6)
+        # GEX normalization WITHOUT lookahead bias
+        # Only normalize by notional value (no global statistics)
+        # Rolling Z-scores in ensemble_model.py will handle stationarity
+        daily['gex'] = daily['gex_raw'] / (daily['spot_price'] ** 2 * 100 + 1e6)
         daily['gex_atm_normalized'] = daily['gex_atm'] / (daily['spot_price'] ** 2 * 100 + 1e6)
-        
-        # Additional winsorization on normalized values (5th-95th percentile for more aggressive clipping)
-        gex_p05 = daily['gex'].quantile(0.05)
-        gex_p95 = daily['gex'].quantile(0.95)
-        daily['gex'] = daily['gex'].clip(gex_p05, gex_p95)
-        
-        gex_atm_p05 = daily['gex_atm_normalized'].quantile(0.05)
-        gex_atm_p95 = daily['gex_atm_normalized'].quantile(0.95)
-        daily['gex_atm_normalized'] = daily['gex_atm_normalized'].clip(gex_atm_p05, gex_atm_p95)
-        
-        # Z-score normalization to make GEX more interpretable
-        gex_mean = daily['gex'].mean()
-        gex_std = daily['gex'].std()
-        daily['gex'] = (daily['gex'] - gex_mean) / (gex_std + 1e-8)
-        
-        # Final safety clip to [-5, 5] range
-        daily['gex'] = daily['gex'].clip(-5, 5)
         
         # Put/Call ratios
         daily['total_put_volume'] = daily['putVolume']
@@ -299,13 +278,7 @@ class FeatureEngineer:
             if 'iv_atm_monthly' in df.columns:
                 df[f'iv_atm_monthly_ma_{window}d'] = df['iv_atm_monthly'].rolling(window, min_periods=min_periods).mean()
         
-        # Clip extreme momentum values to prevent outliers
-        for window in windows:
-            mom_col = f'momentum_{window}d'
-            if mom_col in df.columns:
-                mom_p01 = df[mom_col].quantile(0.01)
-                mom_p99 = df[mom_col].quantile(0.99)
-                df[mom_col] = df[mom_col].clip(mom_p01, mom_p99)
+        # No global clipping - rolling Z-scores will handle outliers without lookahead bias
         
         return df
     
@@ -383,13 +356,9 @@ class FeatureEngineer:
             df['vol_smile'] = df['iv_atm_monthly'] - (df['iv_otm_put_monthly'] + df['iv_otm_call_monthly']) / 2
             df['vol_smile'] = df['vol_smile'].clip(-0.2, 0.2)
         
-        # Interaction Terms (with outlier control)
+        # Interaction Terms (no global clipping to avoid lookahead bias)
         if 'gex' in df.columns and 'momentum_20d' in df.columns:
             df['gex_x_momentum'] = df['gex'] * df['momentum_20d']
-            # Clip interaction terms
-            p01 = df['gex_x_momentum'].quantile(0.01)
-            p99 = df['gex_x_momentum'].quantile(0.99)
-            df['gex_x_momentum'] = df['gex_x_momentum'].clip(p01, p99)
         
         if 'vrp' in df.columns and 'vol_skew_monthly' in df.columns:
             df['vrp_x_skew'] = df['vrp'] * df['vol_skew_monthly']
@@ -399,10 +368,6 @@ class FeatureEngineer:
         
         if 'net_delta_flow' in df.columns and 'momentum_10d' in df.columns:
             df['delta_flow_x_momentum'] = df['net_delta_flow'] * df['momentum_10d']
-            # Clip this interaction
-            p01 = df['delta_flow_x_momentum'].quantile(0.01)
-            p99 = df['delta_flow_x_momentum'].quantile(0.99)
-            df['delta_flow_x_momentum'] = df['delta_flow_x_momentum'].clip(p01, p99)
         
         if 'gex' in df.columns and 'rv_20d' in df.columns:
             df['gex_x_rvol'] = df['gex'] * df['rv_20d']
