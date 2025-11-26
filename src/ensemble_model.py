@@ -263,11 +263,11 @@ class EnsembleAlphaModel:
                 vol_scalar = 1.0
             
             # 4. Regime filter (kill switch)
-            if rolling_vol[i] > 0.50:  # >50% vol: go to cash
+            if rolling_vol[i] > 0.40:  # High vol: exit
                 final_signal = 0.0
-            elif rolling_vol[i] > 0.35:  # >35% vol: cut size in half
+            elif rolling_vol[i] > 0.28:  # Medium-high vol: 50% position
                 final_signal = dir_signal * vol_scalar * 0.5
-            elif rolling_vol[i] > 0.22:  # >15% vol: cut size to 1/3
+            elif rolling_vol[i] > 0.22:  # Medium vol: 75% position
                 final_signal = dir_signal * vol_scalar * 0.75
             else:
                 final_signal = dir_signal * vol_scalar
